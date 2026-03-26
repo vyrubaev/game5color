@@ -2,26 +2,63 @@ import { useState , useMemo} from 'react'
 import './App.css'
 
 function App() {
-    const n=5;
-    const winState = new Set();
-    const setOfcolors = { 1: 'red', 2: 'blue', 3: 'green', 4: 'yellow', 5: 'orange'}
-    const colorsArray = useMemo(() => {
-          const winState = new Set();
-          while (winState.size < n) {
-              const randomNum = Math.floor(Math.random() * n) + 1;
-              winState.add(randomNum);
-          }
-          // Превращаем Set в массив и заменяем числа на цвета
-          const result = Array.from(winState).map(num => setOfcolors[num]);
-          console.log("Generated Colors:", result);
-          return result;
-    }, []);
+  const n=5;
+  const winState = new Set();
+  const setOfcolors = { 1: 'red', 2: 'blue', 3: 'green', 4: 'yellow', 5: 'orange'}
+
+  const checkGuess = () => {
+  let matches = 0;
+  for (let i = 0; i < n; i++) {
+    if (userGuess[i] === secretCode[i]) {
+      matches++;
+    }
+  
+    alert(`Угадано позиций: ${matches}`);
+  
+    if (matches === n) {
+      alert("Поздравляю! Ты взломал код! 🎉");
+    }
+  }
+}
+  const colorsArray = useMemo(() => {
+        const winState = new Set();
+        while (winState.size < n) {
+            const randomNum = Math.floor(Math.random() * n) + 1;
+            winState.add(randomNum);
+        }
+        // Превращаем Set в массив и заменяем числа на цвета
+        const result = Array.from(winState).map(num => setOfcolors[num]);
+        console.log("Generated Colors:", result);
+        return result;
+  }, []);
+  
+  const highlightStyle = { //стиль для раскрашивания количества цветов
+    color: setOfcolors[5],
+    textShadow: '1px 1px 2px rgba(0,0,0,0.2)', // добавление обЪема на Retina-экране
+    padding: '0 5px'
+  };
 
   return (
     <div>
       <h1>Угадай цвета</h1>{/*TODO:раскрасить буквы в цвета*/}
+      <section className="rules" style={{ textAlign: 'left', padding: '15px', border: '1px solid #fff' }}>
+        <h3>Правила «Цветовой код»:</h3>
+        <p>🎯 <strong>Цель:</strong> Угадай <span style={highlightStyle}>{n}</span> секретных цветов и их порядок.</p>
+        <p>🎨 <strong>Ход:</strong> Расставь свои цвета и нажми «Проверить».</p>
+        <p>🔍 <strong>Подсказка:</strong> Ты узнаешь только <strong>количество</strong> верно угаданных позиций.</p>
+        <p>🏆 <strong>Победа:</strong> Играй, пока не найдешь все <span style={highlightStyle}>{n}</span> совпадений!</p>
+      </section>
+      <section className="game-area">
+        <div className="secret-code">
+          {colorsArray.map((color, index) => (
+            <div key={index} className="color-slot" style={{ backgroundColor: color }}></div>
+          ))}
+        </div>
+        <button onClick={checkGuess}>Проверить</button>
+      </section>
     </div>
   );
+
 }
 
 export default App
