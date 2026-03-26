@@ -7,19 +7,18 @@ function App() {
   const setOfcolors = { 1: 'red', 2: 'blue', 3: 'green', 4: 'yellow', 5: 'orange'}
 
   const checkGuess = () => {
-  let matches = 0;
-  for (let i = 0; i < n; i++) {
-    if (userGuess[i] === secretCode[i]) {
-      matches++;
+    let matches = 0;
+    for (let i = 0; i < n; i++) {
+      if (userGuess[i] === colorsArray[i]) {
+        matches++;
+      }
     }
-  
     alert(`Угадано позиций: ${matches}`);
   
     if (matches === n) {
       alert("Поздравляю! Ты взломал код! 🎉");
     }
   }
-}
   const colorsArray = useMemo(() => {
         const winState = new Set();
         while (winState.size < n) {
@@ -31,11 +30,22 @@ function App() {
         console.log("Generated Colors:", result);
         return result;
   }, []);
-  
+
   const highlightStyle = { //стиль для раскрашивания количества цветов
     color: setOfcolors[5],
     textShadow: '1px 1px 2px rgba(0,0,0,0.2)', // добавление обЪема на Retina-экране
     padding: '0 5px'
+  };
+
+  const [userGuess, setUserGuess] = useState(Array(n).fill('#ccc'));
+  // Состояние: индекс открытой сейчас ячейки (null если все закрыты)
+  const [openSlot, setOpenSlot] = useState(null);
+
+  const handleSelectColor = (slotIndex, color) => {
+    const newGuess = [...userGuess];
+    newGuess[slotIndex] = color;
+    setUserGuess(newGuess);
+    setOpenSlot(null); // Закрываем меню после выбора
   };
 
   return (
@@ -49,16 +59,37 @@ function App() {
         <p>🏆 <strong>Победа:</strong> Играй, пока не найдешь все <span style={highlightStyle}>{n}</span> совпадений!</p>
       </section>
       <section className="game-area">
-        <div className="secret-code">
-          {colorsArray.map((color, index) => (
-            <div key={index} className="color-slot" style={{ backgroundColor: color }}></div>
-          ))}
+    <div className="secret-code">
+      {userGuess.map((color, index) => (
+        <div 
+          key={index} 
+          className="color-slot" 
+          style={{ backgroundColor: color }}
+          onClick={() => setOpenSlot(openSlot === index ? null : index)}
+        >
+          {/* Если этот слот нажат — показываем меню выбора */}
+          {openSlot === index && (
+            <div className="options-menu">
+              {Object.values(setOfcolors).map((optionColor) => (
+                <div
+                  key={optionColor}
+                  className="option-circle"
+                  style={{ backgroundColor: optionColor }}
+                  onClick={(e) => {
+                    e.stopPropagation(); // Чтобы клик не закрыл меню сразу
+                    handleSelectColor(index, optionColor);
+                  }}
+                />
+              ))}
+            </div>
+          )}
         </div>
-        <button onClick={checkGuess}>Проверить</button>
-      </section>
+      ))}
     </div>
+    <button onClick={checkGuess}>Проверить</button>
+  </section>
+  </div>
   );
-
 }
 
 export default App
