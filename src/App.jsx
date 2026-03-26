@@ -6,6 +6,7 @@ function App() {
   const winState = new Set();
   const setOfcolors = { 1: 'red', 2: 'blue', 3: 'green', 4: 'yellow', 5: 'orange'}
   const [isWinner, setIsWinner] = useState(false);
+  const [message, setMessage] = useState('Расставь цвета и нажми проверку!');
 
   const checkGuess = () => {
     let matches = 0;
@@ -16,10 +17,13 @@ function App() {
     }
     if (matches === n) {
       //alert("Поздравляю! Ты взломал код! 🎉");
+      setMessage("Поздравляю! Код взломан! 🎉");
       setIsWinner(true);
-      return;
+    } else {
+      setMessage(`Угадано позиций: ${matches} из ${n}`);
+      //alert(`Угадано позиций: ${matches} из ${n}`);
     }
-    alert(`Угадано позиций: ${matches}`);
+    
   
   }
   const colorsArray = useMemo(() => {
@@ -114,6 +118,9 @@ function App() {
           )}
         </div>
       ))}
+    </div>
+    <div className={`status-banner ${isWinner ? 'win-text' : ''}`}>
+      {message}
     </div>
     <button onClick={checkGuess}>Проверить</button>
     <button 
