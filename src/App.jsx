@@ -13,11 +13,12 @@ function App() {
         matches++;
       }
     }
-    alert(`Угадано позиций: ${matches}`);
-  
     if (matches === n) {
       alert("Поздравляю! Ты взломал код! 🎉");
+      return;
     }
+    alert(`Угадано позиций: ${matches}`);
+  
   }
   const colorsArray = useMemo(() => {
         const winState = new Set();
@@ -41,12 +42,23 @@ function App() {
   // Состояние: индекс открытой сейчас ячейки (null если все закрыты)
   const [openSlot, setOpenSlot] = useState(null);
 
-  const handleSelectColor = (slotIndex, color) => {
-    const newGuess = [...userGuess];
-    newGuess[slotIndex] = color;
-    setUserGuess(newGuess);
-    setOpenSlot(null); // Закрываем меню после выбора
-  };
+  const handleSelectColor = (slotIndex, newColor) => {
+  const newGuess = [...userGuess];
+  
+  // 1. Ищем, в какой ячейке уже стоит этот цвет (если стоит)
+  const existingIndex = newGuess.findIndex(color => color === newColor);
+
+  if (existingIndex !== -1) {
+    // 2. Если нашли — меняем местами! 
+    // В ячейку, где был этот цвет, ставим тот, что был в текущем слоте
+    newGuess[existingIndex] = userGuess[slotIndex];
+  }
+  // 3. В текущий слот ставим выбранный цвет
+  newGuess[slotIndex] = newColor;
+
+  setUserGuess(newGuess);
+  setOpenSlot(null);
+};
 
   return (
     <div>
