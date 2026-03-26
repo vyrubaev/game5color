@@ -137,7 +137,7 @@ const [titleColors, setTitleColors] = useState(getRandomTitleColors);
     <button onClick={checkGuess}>Проверить</button>
     <button 
         onClick={restartGame} 
-        style={{ backgroundColor: '#f44336' }}
+        style={{ backgroundColor: colorsArray[0] }}
       >
         Начать сначала 🔄
       </button>
