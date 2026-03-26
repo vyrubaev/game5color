@@ -5,8 +5,20 @@ function App() {
   const n=5;
   const winState = new Set();
   const setOfcolors = { 1: 'red', 2: 'blue', 3: 'green', 4: 'yellow', 5: 'orange'}
+  const [gameKey, setGameKey] = useState(0);
   const [isWinner, setIsWinner] = useState(false);
   const [message, setMessage] = useState('Расставь цвета и нажми проверку!');
+
+  // Вспомогательная функция для получения N случайных цветов из твоего набора
+const getRandomTitleColors = () => {
+  const colors = Object.values(setOfcolors); // ['red', 'blue', ...]
+  // Создаем массив цветов длины заголовка, выбирая случайный цвет для каждой буквы
+  return "Угадай цвета".split("").map(() => colors[Math.floor(Math.random() * colors.length)]);
+};
+
+// Состояние, хранящее массив цветов для каждой буквы заголовка
+const [titleColors, setTitleColors] = useState(getRandomTitleColors);
+
 
   const checkGuess = () => {
     let matches = 0;
@@ -36,7 +48,7 @@ function App() {
         const result = Array.from(winState).map(num => setOfcolors[num]);
         console.log("Generated Colors:", result);
         return result;
-  }, []);
+  }, [gameKey]); // Перегенерировать при изменении gameKey
 
   const highlightStyle = { //стиль для раскрашивания количества цветов
     color: colorsArray[n-1],
@@ -68,22 +80,22 @@ function App() {
   const restartGame = () => {
       // 1. Сбрасываем выбор пользователя на серые квадраты
       setUserGuess(Array(n).fill('#ccc'));
-      
-      // 2. Убираем статус победы (анимация остановится)
-      setIsWinner(false);
-      
       // 3. Закрываем все открытые меню выбора
       setOpenSlot(null);
-
       // 4. Генерируем НОВЫЙ секретный код
-      // Для этого нам нужно обновить ключ или вызвать генерацию. 
-      // Самый простой способ в твоем случае — обновить страницу или 
-      // использовать специальный state для ключа (но давай пока просто обновим код)
-      window.location.reload(); 
+      setGameKey(prev => prev + 1);
+      setTitleColors(getRandomTitleColors());
+      setMessage('Расставь цвета и нажми проверку!'); 
+      setIsWinner(false);
     };
   return (
     <div>
-      <h1>Угадай цвета</h1>{/*TODO:раскрасить буквы в цвета*/}
+      <h1>{"Угадай цвета".split("").map((char, index) => (
+        <span key={index} style={{ color: titleColors[index] }}>
+          {char}
+        </span>
+        ))}
+      </h1>
       <section className="rules" style={{ textAlign: 'left', padding: '15px', border: '1px solid #fff' }}>
         <h3>Правила «Цветовой код»:</h3>
         <p>🎯 <strong>Цель:</strong> Угадай <span style={highlightStyle}>{n}</span> секретных цветов и их порядок.</p>
