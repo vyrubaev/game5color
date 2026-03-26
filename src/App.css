@@ -6,7 +6,7 @@
 }
 
 .color-slot {
-  width: 50px;
+  width: 62px;
   height: 50px;
   border-radius: 8px;
   border: 2px solid #fff;
@@ -14,6 +14,9 @@
   position: relative; /* Чтобы выпадающее меню крепилось к квадрату */
   background-color: #ccc; /* Серый цвет по умолчанию */
   transition: transform 0.2s;
+  transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .color-slot:hover {
@@ -25,14 +28,17 @@
   position: absolute;
   top: 60px;
   left: 0;
-  background: white;
-  padding: 8px;
-  border-radius: 8px;
+  background: #2a2a2a; /* Темный фон для контраста */
+  padding: 10px;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  z-index: 10;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  gap: 8px;
+  z-index: 100;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  
+  /* Плавное появление меню */
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .option-circle {
@@ -41,3 +47,23 @@
   border-radius: 50%;
   border: 1px solid #ddd;
 }
+.winner-jump {
+  animation: jump 0.5s ease infinite alternate;
+}
+
+@keyframes jump {
+  from { transform: translateY(0); }
+  to { transform: translateY(-15px); }
+}
+
+ button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 25px;
+  background-color: #6e2b61;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;}

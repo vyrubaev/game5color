@@ -5,6 +5,7 @@ function App() {
   const n=5;
   const winState = new Set();
   const setOfcolors = { 1: 'red', 2: 'blue', 3: 'green', 4: 'yellow', 5: 'orange'}
+  const [isWinner, setIsWinner] = useState(false);
 
   const checkGuess = () => {
     let matches = 0;
@@ -14,7 +15,8 @@ function App() {
       }
     }
     if (matches === n) {
-      alert("Поздравляю! Ты взломал код! 🎉");
+      //alert("Поздравляю! Ты взломал код! 🎉");
+      setIsWinner(true);
       return;
     }
     alert(`Угадано позиций: ${matches}`);
@@ -33,7 +35,7 @@ function App() {
   }, []);
 
   const highlightStyle = { //стиль для раскрашивания количества цветов
-    color: setOfcolors[5],
+    color: colorsArray[n-1],
     textShadow: '1px 1px 2px rgba(0,0,0,0.2)', // добавление обЪема на Retina-экране
     padding: '0 5px'
   };
@@ -59,7 +61,22 @@ function App() {
   setUserGuess(newGuess);
   setOpenSlot(null);
 };
+  const restartGame = () => {
+      // 1. Сбрасываем выбор пользователя на серые квадраты
+      setUserGuess(Array(n).fill('#ccc'));
+      
+      // 2. Убираем статус победы (анимация остановится)
+      setIsWinner(false);
+      
+      // 3. Закрываем все открытые меню выбора
+      setOpenSlot(null);
 
+      // 4. Генерируем НОВЫЙ секретный код
+      // Для этого нам нужно обновить ключ или вызвать генерацию. 
+      // Самый простой способ в твоем случае — обновить страницу или 
+      // использовать специальный state для ключа (но давай пока просто обновим код)
+      window.location.reload(); 
+    };
   return (
     <div>
       <h1>Угадай цвета</h1>{/*TODO:раскрасить буквы в цвета*/}
@@ -71,7 +88,7 @@ function App() {
         <p>🏆 <strong>Победа:</strong> Играй, пока не найдешь все <span style={highlightStyle}>{n}</span> совпадений!</p>
       </section>
       <section className="game-area">
-    <div className="secret-code">
+    <div className={`secret-code ${isWinner ? 'winner-jump' : ''}`}>
       {userGuess.map((color, index) => (
         <div 
           key={index} 
@@ -99,6 +116,12 @@ function App() {
       ))}
     </div>
     <button onClick={checkGuess}>Проверить</button>
+    <button 
+        onClick={restartGame} 
+        style={{ backgroundColor: '#f44336' }}
+      >
+        Начать сначала 🔄
+      </button>
   </section>
   </div>
   );
