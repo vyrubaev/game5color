@@ -2,7 +2,7 @@ import { useState , useMemo} from 'react'
 import './App.css'
 import { polyfill } from 'mobile-drag-drop';
 import { scrollBehaviourDragImageTranslateOverride } from 'mobile-drag-drop/scroll-behaviour-drag-image-translate-override';
-
+window.Telegram.WebApp.disableVerticalSwipes();
 polyfill({
     dragImageTranslateOverride: scrollBehaviourDragImageTranslateOverride
 });
