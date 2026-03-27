@@ -69,6 +69,16 @@ button:active {
   transform: scale(0.95);
   background-color: #8e3a7d; /* Добавил легкое изменение цвета при клике */
 }
+.restart-btn {
+  align-self: center; /* Если родитель flex */
+  margin-top: 60px !important;
+  transition: all 0.3s ease;
+}
+
+.restart-btn:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
 
 .shake-animation {
   animation: shake 0.4s ease-in-out;

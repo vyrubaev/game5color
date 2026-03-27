@@ -10,6 +10,18 @@ function App() {
   const [userGuess, setUserGuess] = useState([]);
   const [draggedIndex, setDraggedIndex] = useState(null);
   const [isShaking, setIsShaking] = useState(false);
+
+  const playClick = () => {
+  const audio = new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3');
+  audio.volume = 0.6;
+  audio.play();
+};
+
+const playWin = () => {
+  const audio = new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3');
+  audio.volume = 0.3;
+  audio.play();
+};
   
   //функция для получения N случайных цветов из набора
 const getRandomTitleColors = () => {
@@ -49,9 +61,11 @@ const [titleColors, setTitleColors] = useState(getRandomTitleColors);
       }
     }
     if (matches === n) {
+      playWin(); // Проигрываем звук победы
       setMessage("Поздравляю! Код взломан! 🎉");
       setIsWinner(true);
     } else {
+      playClick(); // Проигрываем звук при каждом неправильном ответе
       setMessage(`Угадано позиций: ${matches} из ${n}`);
     }
   }
@@ -132,7 +146,7 @@ const handleDrop = (targetIndex) => {
       >Проверить
     </button>
     <button 
-        сlassName="restart-btn"
+        className="restart-btn"
         onClick={restartGame} 
         style={{ backgroundColor: colorsArray[0],
           color: (colorsArray[0] === 'yellow' || colorsArray[0] === 'pink') ? '#000' : '#fff'
