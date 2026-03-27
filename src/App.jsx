@@ -1,5 +1,11 @@
 import { useState , useMemo} from 'react'
 import './App.css'
+import { polyfill } from 'mobile-drag-drop';
+import { scrollBehaviourDragImageTranslateOverride } from 'mobile-drag-drop/scroll-behaviour-drag-image-translate-override';
+
+polyfill({
+    dragImageTranslateOverride: scrollBehaviourDragImageTranslateOverride
+});
 
 function App() {
   const n=6; // Количество цветов в коде ( если нудно больше цветов, то увеличить setOfcolors)
@@ -11,27 +17,29 @@ function App() {
   const [draggedIndex, setDraggedIndex] = useState(null);
   const [isShaking, setIsShaking] = useState(false);
 
-  const playClick = () => {
-  const audio = new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3');
-  audio.volume = 0.6;
-  audio.play();
-};
+  const clickSound = useMemo(() => new Audio('/sounds/click.mp3'), []);
+  const winSound = useMemo(() => new Audio('/sounds/win.mp3'), []);
 
-const playWin = () => {
-  const audio = new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3');
-  audio.volume = 0.3;
-  audio.play();
+  const playClick = () => {
+  clickSound.currentTime = 0; // Сбрасываем в начало, если кликаем быстро
+  clickSound.volume = 0.6;
+  clickSound.play();
 };
+  const playWin = () => {
+    winSound.currentTime = 0;
+    winSound.volume = 0.3;
+    winSound.play();
+  };
   
   //функция для получения N случайных цветов из набора
-const getRandomTitleColors = () => {
-  const colors = Object.values(setOfcolors); // ['red', 'blue', ...]
-  // Создаем массив цветов длины заголовка, выбирая случайный цвет для каждой буквы
-  return "Угадай цвета".split("").map(() => colors[Math.floor(Math.random() * colors.length)]);
-};
+  const getRandomTitleColors = () => {
+    const colors = Object.values(setOfcolors); // ['red', 'blue', ...]
+    // Создаем массив цветов длины заголовка, выбирая случайный цвет для каждой буквы
+    return "Угадай цвета".split("").map(() => colors[Math.floor(Math.random() * colors.length)]);
+  };
 
-// Состояние, хранящее массив цветов для каждой буквы заголовка
-const [titleColors, setTitleColors] = useState(getRandomTitleColors);
+  // Состояние, хранящее массив цветов для каждой буквы заголовка
+  const [titleColors, setTitleColors] = useState(getRandomTitleColors);
 
   const shuffleArray = (array) => {
     return [...array].sort(() => Math.random() - 0.5);
@@ -44,9 +52,6 @@ const [titleColors, setTitleColors] = useState(getRandomTitleColors);
   
   return shuffled;
 }, [gameKey]);
-
-  
-
 
   const checkGuess = () => {
     // Включаем тряску
