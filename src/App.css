@@ -16,7 +16,7 @@
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
               transform 0.2s ease;
-              
+
   /* Запрещаем браузеру перехватывать палец для скролла */
   touch-action: none !important; 
   
@@ -37,6 +37,15 @@
 
 .color-slot:hover {
   transform: scale(1.05);
+}
+
+.color-slot[draggable="true"] {
+  cursor: move;
+}
+
+/* Это предотвратит блокировку события Drop самой иконкой */
+.color-slot {
+  pointer-events: auto;
 }
 
 .winner-jump {
