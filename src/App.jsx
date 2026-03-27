@@ -1,15 +1,20 @@
-import { useState , useMemo} from 'react'
+import { useState , useMemo, useEffect} from 'react'
 import './App.css'
 import { polyfill } from 'mobile-drag-drop';
-import { scrollBehaviourDragImageTranslateOverride } from 'mobile-drag-drop/scroll-behaviour-drag-image-translate-override';
-window.Telegram.WebApp.disableVerticalSwipes();
-polyfill({
-    dragImageTranslateOverride: scrollBehaviourDragImageTranslateOverride
-});
+import 'mobile-drag-drop/default.css';
 
 function App() {
-  const n=6; // Количество цветов в коде ( если нудно больше цветов, то увеличить setOfcolors)
-  const setOfcolors = { 1: 'red', 2: 'blue', 3: 'green', 4: 'yellow', 5: 'pink', 6: 'grey'}; // Набор доступных цветов. Увеличить если нужно больше цветов
+  useEffect(() => {
+    // 1. Запуск полифила для мобилок
+    polyfill();
+    if (window.Telegram && window.Telegram.WebApp) {
+      const tg = window.Telegram.WebApp;
+      tg.ready();
+      tg.disableVerticalSwipes(); // Теперь не упадет в обычном Chrome
+    }
+  }, []);
+  const n=5; // Количество цветов в коде ( если нудно больше цветов, то увеличить setOfcolors)
+  const setOfcolors = { 1: 'red', 2: 'blue', 3: 'green', 4: 'yellow', 5: 'pink'}; // Набор доступных цветов. Увеличить если нужно больше цветов
   const [gameKey, setGameKey] = useState(0);
   const [isWinner, setIsWinner] = useState(false);
   const [message, setMessage] = useState('Расставь цвета и нажми проверку!');
