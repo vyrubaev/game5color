@@ -49,14 +49,11 @@ function App() {
   const shuffleArray = (array) => {
     return [...array].sort(() => Math.random() - 0.5);
   };
-  const initialUserLayout = useMemo(() => {
-  const colors = Object.values(setOfcolors); // Берем ['red', 'blue', 'green', 'yellow', 'orange']
-  const shuffled = shuffleArray(colors);
-  // Устанавливаем это в стейт пользователя
-  setUserGuess(shuffled);
-  
-  return shuffled;
-}, [gameKey]);
+  useEffect(() => {
+    const colors = Object.values(setOfcolors);
+    const shuffled = [...colors].sort(() => Math.random() - 0.5);
+    setUserGuess(shuffled);
+  }, [gameKey]);
 
   const checkGuess = () => {
     // Включаем тряску
@@ -143,12 +140,16 @@ const handleDrop = (targetIndex) => {
           onDragStart={(e) => {
             setDraggedIndex(index);
             e.dataTransfer.setData("text/plain", index);
+            e.dataTransfer.effectAllowed = "move"; // Явно разрешаем перемещение
             e.stopPropagation();
           }}
           onDragOver={(e) => {
             e.preventDefault();
             e.dataTransfer.dropEffect = 'move';
-          }} // Обязательно для работы Drop
+          }}
+          onDragEnter={(e) => {
+            e.preventDefault(); 
+          }}
           onDrop={(e) => {
             e.preventDefault();
             handleDrop(index);
