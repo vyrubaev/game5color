@@ -116,6 +116,7 @@ const handleDrop = (targetIndex) => {
       setMessage('Расставь цвета и нажми проверку!'); 
       setIsWinner(false);
     };
+    
   return (
     <div>
       <h1>{"Угадай цвета".split("").map((char, index) => (
