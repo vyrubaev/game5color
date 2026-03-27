@@ -21,46 +21,41 @@ function App() {
   const [userGuess, setUserGuess] = useState([]);
   const [draggedIndex, setDraggedIndex] = useState(null);
   const [isShaking, setIsShaking] = useState(false);
-
-  const clickSound = useMemo(() => new Audio('/sounds/click.mp3'), []);
+/
+  const clickSound = useMemo(() => new Audio('/sounds/click.mp3'), []); //TODO - добавить звуки в папку public/sounds 
   const winSound = useMemo(() => new Audio('/sounds/win.mp3'), []);
 
   const playClick = () => {
-  clickSound.currentTime = 0; // Сбрасываем в начало, если кликаем быстро
-  clickSound.volume = 0.6;
+  clickSound.currentTime = 0;
+  clickSound.volume = 0.4;
   clickSound.play();
 };
   const playWin = () => {
     winSound.currentTime = 0;
-    winSound.volume = 0.3;
+    winSound.volume = 0.6;
     winSound.play();
   };
   
-  //функция для получения N случайных цветов из набора
+  //функция для получения N случайных цветов из набора для заголовка
   const getRandomTitleColors = () => {
     const colors = Object.values(setOfcolors); // ['red', 'blue', ...]
     // Создаем массив цветов длины заголовка, выбирая случайный цвет для каждой буквы
     return "Угадай цвета".split("").map(() => colors[Math.floor(Math.random() * colors.length)]);
   };
-
   // Состояние, хранящее массив цветов для каждой буквы заголовка
   const [titleColors, setTitleColors] = useState(getRandomTitleColors);
 
-  const shuffleArray = (array) => {
-    return [...array].sort(() => Math.random() - 0.5);
-  };
   useEffect(() => {
     const colors = Object.values(setOfcolors);
     const shuffled = [...colors].sort(() => Math.random() - 0.5);
     setUserGuess(shuffled);
   }, [gameKey]);
-
-  const checkGuess = () => {
+  // Функция для проверки догадки пользователя
+  const checkGuess = () => {  
     // Включаем тряску
     setIsShaking(true);
     // Выключаем её через 0.5 секунды, чтобы можно было нажать снова
     setTimeout(() => setIsShaking(false), 500);
-
     let matches = 0;
     for (let i = 0; i < n; i++) {
       if (userGuess[i] === colorsArray[i]) {
@@ -136,11 +131,11 @@ const handleDrop = (targetIndex) => {
           key={index} 
           className="color-slot" 
           style={{ backgroundColor: color }}
-          draggable={!isWinner} // Разрешаем тянуть, если игра не окончена
+          draggable={!isWinner}
           onDragStart={(e) => {
             setDraggedIndex(index);
             e.dataTransfer.setData("text/plain", index);
-            e.dataTransfer.effectAllowed = "move"; // Явно разрешаем перемещение
+            e.dataTransfer.effectAllowed = "move";
             e.stopPropagation();
           }}
           onDragOver={(e) => {
@@ -155,7 +150,6 @@ const handleDrop = (targetIndex) => {
             handleDrop(index);
           }}
         >
-          {/* options-menu удалено! */}
         </div>
       ))}
     </div>

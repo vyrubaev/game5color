@@ -15,18 +15,10 @@
   cursor: grab;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   transition: background-color 0.3s ease;
-  /* Запрещаем браузеру перехватывать палец для скролла */
-  touch-action: none !important; 
-  
-  /* Убираем выделение текста при долгом нажатии */
+  touch-action: none !important; /* Отключаем стандартные жесты на мобильных устройствах */
   user-select: none;
   -webkit-user-select: none;
-  
-  /* Для iOS: разрешаем перетаскивание */
   -webkit-user-drag: element;
-  
-  /* Делаем область нажатия чуть больше (опционально) */
-  cursor: grab;
 }
 
 .color-slot:active {
@@ -39,11 +31,6 @@
 
 .color-slot[draggable="true"] {
   cursor: move;
-}
-
-/* Это предотвратит блокировку события Drop самой иконкой */
-.color-slot {
-  pointer-events: auto;
 }
 
 .winner-jump {
@@ -62,7 +49,7 @@
   font-weight: bold;
   min-height: 1.5em;
   transition: all 0.3s ease;
-  text-align: center; /* Чтобы текст сообщения был по центру */
+  text-align: center;
 }
 
 .win-text {
@@ -82,12 +69,12 @@ button {
   border-radius: 8px;
   cursor: pointer;
   outline: none;
-  transition: all 0.2s ease; /* Универсальный транзишн для всего */
+  transition: all 0.2s ease;
 }
 
 button:active {
   transform: scale(0.95);
-  background-color: #8e3a7d; /* Добавил легкое изменение цвета при клике */
+  background-color: #f40505; 
 }
 .restart-btn {
   align-self: center; /* Если родитель flex */
