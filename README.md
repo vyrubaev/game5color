@@ -1,3 +1,9 @@
+# Color Code (Угадай цвета) 🎨
+
+> **Live Demo:** [https://game5color.vercel.app](https://game5color.vercel.app)
+
+![Vercel Deploy](https://therealsujitk-vercel-badge.vercel.app/?app=game5color)
+
 🇺🇸 Description in English
 Color Code (Guess the Colors) 🎨
 An interactive logical puzzle game built specifically for Telegram Mini Apps. Test your intuition and logic by cracking secret color combinations!
