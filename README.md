@@ -1,16 +1,43 @@
-# React + Vite
+🇺🇸 Description in English
+Color Code (Guess the Colors) 🎨
+An interactive logical puzzle game built specifically for Telegram Mini Apps. Test your intuition and logic by cracking secret color combinations!
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+✨ Features
+Mobile Drag-and-Drop: Smooth touch-based dragging support for iOS and Android using specialized polyfills.
 
-Currently, two official plugins are available:
+Telegram WebApp Integration: Adaptive interface, disabled vertical swipes, and native-ready launch within Telegram.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Dynamic Difficulty: Easily adjustable number of colors and positions.
 
-## React Compiler
+Interactive UI: "Shake" animations on incorrect guesses and celebratory victory effects.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+🛠 Tech Stack
+React 19 (Hooks: useState, useEffect, useMemo)
 
-## Expanding the ESLint configuration
+Vite (Blazing fast build tool and HMR)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Mobile-drag-drop (Polyfill for HTML5 Drag-and-Drop touch support)
+
+CSS3 (Flexbox, Keyframes animations)
+
+🇷🇺 Описание на русском
+Color Code (Угадай цвета) 🎨
+Интерактивная логическая игра-головоломка, созданная специально для Telegram Mini Apps. Испытайте свою интуицию и логику, взламывая секретные цветовые комбинации!
+
+✨ Особенности
+Drag-and-Drop на мобильных: Полная поддержка перетаскивания пальцем на iOS и Android благодаря полифилам.
+
+Интеграция с Telegram WebApp: Адаптивный интерфейс, отключение лишних жестов и нативная готовность к запуску внутри мессенджера.
+
+Динамическая сложность: Легко настраиваемое количество цветов и позиций.
+
+Интерактивный UI: Анимации «тряски» при ошибке и эффекты победы.
+
+🛠 Стек технологий
+React 19 (Хуки: useState, useEffect, useMemo)
+
+Vite (Молниеносная сборка и HMR)
+
+Mobile-drag-drop (Полифил для поддержки тач-событий)
+
+CSS3 (Flexbox, Keyframes-анимации)
