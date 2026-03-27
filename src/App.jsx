@@ -140,15 +140,19 @@ const handleDrop = (targetIndex) => {
           className="color-slot" 
           style={{ backgroundColor: color }}
           draggable={!isWinner} // Разрешаем тянуть, если игра не окончена
-          onDragStart={() => {
+          onDragStart={(e) => {
             setDraggedIndex(index);
             e.dataTransfer.setData("text/plain", index);
+            e.stopPropagation();
           }}
           onDragOver={(e) => {
             e.preventDefault();
             e.dataTransfer.dropEffect = 'move';
           }} // Обязательно для работы Drop
-          onDrop={() => handleDrop(index)}
+          onDrop={(e) => {
+            e.preventDefault();
+            handleDrop(index);
+          }}
         >
           {/* options-menu удалено! */}
         </div>
