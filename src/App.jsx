@@ -2,14 +2,16 @@ import { useState , useMemo} from 'react'
 import './App.css'
 
 function App() {
-  const n=5;
-  const winState = new Set();
-  const setOfcolors = { 1: 'red', 2: 'blue', 3: 'green', 4: 'yellow', 5: 'orange'}
+  const n=6; // Количество цветов в коде ( если нудно больше цветов, то увеличить setOfcolors)
+  const setOfcolors = { 1: 'red', 2: 'blue', 3: 'green', 4: 'yellow', 5: 'pink', 6: 'grey'}; // Набор доступных цветов. Увеличить если нужно больше цветов
   const [gameKey, setGameKey] = useState(0);
   const [isWinner, setIsWinner] = useState(false);
   const [message, setMessage] = useState('Расставь цвета и нажми проверку!');
-
-  // Вспомогательная функция для получения N случайных цветов из твоего набора
+  const [userGuess, setUserGuess] = useState([]);
+  const [draggedIndex, setDraggedIndex] = useState(null);
+  const [isShaking, setIsShaking] = useState(false);
+  
+  //функция для получения N случайных цветов из набора
 const getRandomTitleColors = () => {
   const colors = Object.values(setOfcolors); // ['red', 'blue', ...]
   // Создаем массив цветов длины заголовка, выбирая случайный цвет для каждой буквы
@@ -19,8 +21,27 @@ const getRandomTitleColors = () => {
 // Состояние, хранящее массив цветов для каждой буквы заголовка
 const [titleColors, setTitleColors] = useState(getRandomTitleColors);
 
+  const shuffleArray = (array) => {
+    return [...array].sort(() => Math.random() - 0.5);
+  };
+  const initialUserLayout = useMemo(() => {
+  const colors = Object.values(setOfcolors); // Берем ['red', 'blue', 'green', 'yellow', 'orange']
+  const shuffled = shuffleArray(colors);
+  // Устанавливаем это в стейт пользователя
+  setUserGuess(shuffled);
+  
+  return shuffled;
+}, [gameKey]);
+
+  
+
 
   const checkGuess = () => {
+    // Включаем тряску
+    setIsShaking(true);
+    // Выключаем её через 0.5 секунды, чтобы можно было нажать снова
+    setTimeout(() => setIsShaking(false), 500);
+
     let matches = 0;
     for (let i = 0; i < n; i++) {
       if (userGuess[i] === colorsArray[i]) {
@@ -28,15 +49,11 @@ const [titleColors, setTitleColors] = useState(getRandomTitleColors);
       }
     }
     if (matches === n) {
-      //alert("Поздравляю! Ты взломал код! 🎉");
       setMessage("Поздравляю! Код взломан! 🎉");
       setIsWinner(true);
     } else {
       setMessage(`Угадано позиций: ${matches} из ${n}`);
-      //alert(`Угадано позиций: ${matches} из ${n}`);
     }
-    
-  
   }
   const colorsArray = useMemo(() => {
         const winState = new Set();
@@ -56,33 +73,20 @@ const [titleColors, setTitleColors] = useState(getRandomTitleColors);
     padding: '0 5px'
   };
 
-  const [userGuess, setUserGuess] = useState(Array(n).fill('#ccc'));
-  // Состояние: индекс открытой сейчас ячейки (null если все закрыты)
-  const [openSlot, setOpenSlot] = useState(null);
+const handleDrop = (targetIndex) => {
+  if (draggedIndex === null || draggedIndex === targetIndex) return;
 
-  const handleSelectColor = (slotIndex, newColor) => {
   const newGuess = [...userGuess];
-  
-  // 1. Ищем, в какой ячейке уже стоит этот цвет (если стоит)
-  const existingIndex = newGuess.findIndex(color => color === newColor);
-
-  if (existingIndex !== -1) {
-    // 2. Если нашли — меняем местами! 
-    // В ячейку, где был этот цвет, ставим тот, что был в текущем слоте
-    newGuess[existingIndex] = userGuess[slotIndex];
-  }
-  // 3. В текущий слот ставим выбранный цвет
-  newGuess[slotIndex] = newColor;
-
+  // Классический swap через временную переменную
+  const temp = newGuess[draggedIndex];
+  newGuess[draggedIndex] = newGuess[targetIndex];
+  newGuess[targetIndex] = temp;
   setUserGuess(newGuess);
-  setOpenSlot(null);
+  setDraggedIndex(null); // Сбрасываем после обмена
 };
+
   const restartGame = () => {
-      // 1. Сбрасываем выбор пользователя на серые квадраты
-      setUserGuess(Array(n).fill('#ccc'));
-      // 3. Закрываем все открытые меню выбора
-      setOpenSlot(null);
-      // 4. Генерируем НОВЫЙ секретный код
+      //  Генерируем НОВЫЙ секретный код
       setGameKey(prev => prev + 1);
       setTitleColors(getRandomTitleColors());
       setMessage('Расставь цвета и нажми проверку!'); 
@@ -110,34 +114,29 @@ const [titleColors, setTitleColors] = useState(getRandomTitleColors);
           key={index} 
           className="color-slot" 
           style={{ backgroundColor: color }}
-          onClick={() => setOpenSlot(openSlot === index ? null : index)}
+          draggable={!isWinner} // Разрешаем тянуть, если игра не окончена
+          onDragStart={() => setDraggedIndex(index)}
+          onDragOver={(e) => e.preventDefault()} // Обязательно для работы Drop
+          onDrop={() => handleDrop(index)}
         >
-          {/* Если этот слот нажат — показываем меню выбора */}
-          {openSlot === index && (
-            <div className="options-menu">
-              {Object.values(setOfcolors).map((optionColor) => (
-                <div
-                  key={optionColor}
-                  className="option-circle"
-                  style={{ backgroundColor: optionColor }}
-                  onClick={(e) => {
-                    e.stopPropagation(); // Чтобы клик не закрыл меню сразу
-                    handleSelectColor(index, optionColor);
-                  }}
-                />
-              ))}
-            </div>
-          )}
+          {/* options-menu удалено! */}
         </div>
       ))}
     </div>
     <div className={`status-banner ${isWinner ? 'win-text' : ''}`}>
       {message}
     </div>
-    <button onClick={checkGuess}>Проверить</button>
+    <button onClick={checkGuess} 
+      className={isShaking ? 'shake-animation' : ''}
+      disabled={isWinner}
+      >Проверить
+    </button>
     <button 
+        сlassName="restart-btn"
         onClick={restartGame} 
-        style={{ backgroundColor: colorsArray[0] }}
+        style={{ backgroundColor: colorsArray[0],
+          color: (colorsArray[0] === 'yellow' || colorsArray[0] === 'pink') ? '#000' : '#fff'
+         }}
       >
         Начать сначала 🔄
       </button>
