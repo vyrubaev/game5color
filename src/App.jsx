@@ -21,7 +21,7 @@ function App() {
   const [userGuess, setUserGuess] = useState([]);
   const [draggedIndex, setDraggedIndex] = useState(null);
   const [isShaking, setIsShaking] = useState(false);
-/
+  
   const clickSound = useMemo(() => new Audio('/sounds/click.mp3'), []); //TODO - добавить звуки в папку public/sounds 
   const winSound = useMemo(() => new Audio('/sounds/win.mp3'), []);
 
@@ -176,4 +176,3 @@ const handleDrop = (targetIndex) => {
 }
 
 export default App
-

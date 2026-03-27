@@ -8,6 +8,7 @@
 .color-slot {
   width: 62px;
   height: 50px;
+  margin-top: 15px;
   border-radius: 8px;
   border: 2px solid #fff;
   position: relative;
