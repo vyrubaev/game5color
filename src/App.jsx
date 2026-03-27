@@ -116,7 +116,7 @@ const handleDrop = (targetIndex) => {
       setMessage('Расставь цвета и нажми проверку!'); 
       setIsWinner(false);
     };
-    
+
   return (
     <div>
       <h1>{"Угадай цвета".split("").map((char, index) => (
@@ -141,7 +141,10 @@ const handleDrop = (targetIndex) => {
           style={{ backgroundColor: color }}
           draggable={!isWinner} // Разрешаем тянуть, если игра не окончена
           onDragStart={() => setDraggedIndex(index)}
-          onDragOver={(e) => e.preventDefault()} // Обязательно для работы Drop
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+          }} // Обязательно для работы Drop
           onDrop={() => handleDrop(index)}
         >
           {/* options-menu удалено! */}

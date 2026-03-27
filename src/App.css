@@ -16,6 +16,19 @@
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
               transform 0.2s ease;
+              
+  /* Запрещаем браузеру перехватывать палец для скролла */
+  touch-action: none !important; 
+  
+  /* Убираем выделение текста при долгом нажатии */
+  user-select: none;
+  -webkit-user-select: none;
+  
+  /* Для iOS: разрешаем перетаскивание */
+  -webkit-user-drag: element;
+  
+  /* Делаем область нажатия чуть больше (опционально) */
+  cursor: grab;
 }
 
 .color-slot:active {
