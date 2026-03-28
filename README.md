@@ -1,8 +1,8 @@
 # Color Code (Угадай цвета) 🎨
 
-> **Live Demo:** [https://game5color.vercel.app](https://game5color.vercel.app)
+[![Vercel Deploy](https://therealsujitk-vercel-badge.vercel.app/?app=game5color)](https://game5color.vercel.app)
 
-![Vercel Deploy](https://therealsujitk-vercel-badge.vercel.app/?app=game5color)
+> **Live Demo:** [https://game5color.vercel.app](https://game5color.vercel.app)
 
 🇺🇸 Description in English
 
