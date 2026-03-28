@@ -15,7 +15,6 @@ const client = mqtt.connect('wss://91e3dbf56f2c402ca4546990a1cfeaa4.s1.eu.hivemq
 
 const sendColorToDevice = (hexColor) => {
   const payload = JSON.stringify({ color: hexColor });
-  // Топик должен СОВПАДАТЬ с тем, на который подписана ESP32
   client.publish('game/color', payload); 
   console.log("Отправлено в облако:", payload);
 };
@@ -99,8 +98,7 @@ function App() {
         return result;
   }, [gameKey]); // Перегенерировать при изменении gameKey
 
-  //отпраыляем цвет в облако цвет в середине секретного кода
-  sendColorToDevice(colorsArray[Math.floor(n/2)]);
+  
 
   const highlightStyle = { //стиль для раскрашивания количества цветов
     color: colorsArray[n-1],
@@ -167,9 +165,12 @@ const handleDrop = (targetIndex) => {
           onDrop={(e) => {
             e.preventDefault();
             handleDrop(index);
+            //отправляем цвет в облако цвет 
+            sendColorToDevice(colorsArray[index]);
           }}
         >
         </div>
+        
       ))}
     </div>
     <div className={`status-banner ${isWinner ? 'win-text' : ''}`}>
