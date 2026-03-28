@@ -2,7 +2,23 @@ import { useState , useMemo, useEffect} from 'react'
 import './App.css'
 import { polyfill } from 'mobile-drag-drop';
 import 'mobile-drag-drop/default.css';
+import mqtt from 'mqtt';
 
+// настройка MQTT клиента для подключения к HiveMQ Cloud. ВАЖНО: эти данные должны совпадать с тем, что указано в ESP32, иначе связь работать не будет!
+const options = {
+  username: 'boyarin', // Тот же, что в ESP32
+  password: '2310819Vic',
+  clientId: 'react_client_' + Math.random().toString(16).substring(2, 8),
+};
+
+const client = mqtt.connect('wss://91e3dbf56f2c402ca4546990a1cfeaa4.s1.eu.hivemq.cloud:8884/mqtt', options);
+
+const sendColorToDevice = (hexColor) => {
+  const payload = JSON.stringify({ color: hexColor });
+  // Топик должен СОВПАДАТЬ с тем, на который подписана ESP32
+  client.publish('game/color', payload); 
+  console.log("Отправлено в облако:", payload);
+};
 function App() {
   useEffect(() => {
     // 1. Запуск полифила для мобилок
@@ -82,6 +98,9 @@ function App() {
         console.log("Generated Colors:", result);
         return result;
   }, [gameKey]); // Перегенерировать при изменении gameKey
+
+  //отпраыляем цвет в облако цвет в середине секретного кода
+  sendColorToDevice(colorsArray[Math.floor(n/2)]);
 
   const highlightStyle = { //стиль для раскрашивания количества цветов
     color: colorsArray[n-1],
