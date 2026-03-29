@@ -24,12 +24,12 @@ const options = {
 
 const client = mqtt.connect('wss://91e3dbf56f2c402ca4546990a1cfeaa4.s1.eu.hivemq.cloud:8884/mqtt', options);
 
-const sendColorToDevice = (hexColor) => {
+const sendColorToDevice = (inputColor) => {
   // Ищем HEX в нашем словаре. Если не нашли — отправляем черный по умолчанию.
-  const hexColor = colorHexMap[colorName] || '#000000';
+  const hexColor = colorHexMap[inputColor] || '#000000';
   const payload = JSON.stringify({ color: hexColor });
   client.publish('game/color', payload); 
-  console.log("Отправлено на ESP32:", colorName, "->", hexColor);
+  console.log("Отправлено на ESP32:", inputColor, "->", hexColor);
 };
 
 function App() {
