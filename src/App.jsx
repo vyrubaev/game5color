@@ -4,6 +4,17 @@ import { polyfill } from 'mobile-drag-drop';
 import 'mobile-drag-drop/default.css';
 import mqtt from 'mqtt';
 
+// Словарь-переводчик: Название -> HEX-код
+const colorHexMap = {
+  'red': '#FF0000',
+  'blue': '#0000FF',
+  'green': '#00FF00',
+  'yellow': '#FFFF00',
+  'pink': '#FFC0CB', // Добавил розовый, так как он есть в твоем наборе
+  'black': '#000000',
+  'white': '#FFFFFF'
+};
+
 // настройка MQTT клиента для подключения к HiveMQ Cloud. ВАЖНО: эти данные должны совпадать с тем, что указано в ESP32, иначе связь работать не будет!
 const options = {
   username: 'boyarin', // Тот же, что в ESP32
@@ -14,10 +25,13 @@ const options = {
 const client = mqtt.connect('wss://91e3dbf56f2c402ca4546990a1cfeaa4.s1.eu.hivemq.cloud:8884/mqtt', options);
 
 const sendColorToDevice = (hexColor) => {
+  // Ищем HEX в нашем словаре. Если не нашли — отправляем черный по умолчанию.
+  const hexColor = colorHexMap[colorName] || '#000000';
   const payload = JSON.stringify({ color: hexColor });
   client.publish('game/color', payload); 
-  console.log("Отправлено в облако:", payload);
+  console.log("Отправлено на ESP32:", colorName, "->", hexColor);
 };
+
 function App() {
   useEffect(() => {
     // 1. Запуск полифила для мобилок
@@ -114,6 +128,7 @@ const handleDrop = (targetIndex) => {
   const temp = newGuess[draggedIndex];
   newGuess[draggedIndex] = newGuess[targetIndex];
   newGuess[targetIndex] = temp;
+  sendColorToDevice(newGuess[targetIndex]);
   setUserGuess(newGuess);
   setDraggedIndex(null); // Сбрасываем после обмена
 };
@@ -165,8 +180,6 @@ const handleDrop = (targetIndex) => {
           onDrop={(e) => {
             e.preventDefault();
             handleDrop(index);
-            //отправляем цвет в облако цвет 
-            sendColorToDevice(colorsArray[index]);
           }}
         >
         </div>
