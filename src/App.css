@@ -1,3 +1,41 @@
+.header-wrapper {
+  display: flex;
+  align-items: center;      /* Выравнивает всё по вертикальному центру */
+  justify-content: space-between; /* Распределяет элементы: пустота - заголовок - кнопка */
+  width: 100%;
+  padding: 10px 15px;
+  box-sizing: border-box;
+}
+
+.main-title {
+  margin: 0;
+  flex-grow: 1;             /* Заголовок занимает всё свободное место */
+  text-align: center;       /* Центрирует текст внутри этого места */
+}
+
+.lang-toggle {
+  background: rgba(255, 255, 255, 0.1); /* Полупрозрачный фон */
+  border: 1px solid #666;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  min-width: 45px;          /* Чтобы кнопка не прыгала при смене RU/EN */
+  transition: all 0.2s ease;
+}
+
+/* Этот блок нужен, чтобы заголовок был ровно по центру экрана, 
+   компенсируя ширину кнопки справа */
+.header-spacer {
+  width: 45px; 
+}
+
+.lang-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+
 .secret-code {
   display: flex;
   gap: 15px;

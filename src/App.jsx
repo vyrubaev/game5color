@@ -3,6 +3,7 @@ import './App.css'
 import { polyfill } from 'mobile-drag-drop';
 import 'mobile-drag-drop/default.css';
 import mqtt from 'mqtt';
+import { useTranslation } from 'react-i18next';
 
 // Словарь-переводчик: Название -> HEX-код
 const colorHexMap = {
@@ -33,6 +34,15 @@ const sendColorToDevice = (inputColor) => {
 };
 
 function App() {
+  // добавление перевода приложения 
+  const { t, i18n } = useTranslation();
+  //var count;
+
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'en' ? 'ru' : 'en';
+    i18n.changeLanguage(newLang);
+  };
+
   useEffect(() => {
     // 1. Запуск полифила для мобилок
     polyfill();
@@ -46,7 +56,7 @@ function App() {
   const setOfcolors = { 1: 'red', 2: 'blue', 3: 'green', 4: 'yellow', 5: 'pink'}; // Набор доступных цветов. Увеличить если нужно больше цветов
   const [gameKey, setGameKey] = useState(0);
   const [isWinner, setIsWinner] = useState(false);
-  const [message, setMessage] = useState('Расставь цвета и нажми проверку!');
+  const [message, setMessage] = useState(t('msgToDo'));
   const [userGuess, setUserGuess] = useState([]);
   const [draggedIndex, setDraggedIndex] = useState(null);
   const [isShaking, setIsShaking] = useState(false);
@@ -69,7 +79,7 @@ function App() {
   const getRandomTitleColors = () => {
     const colors = Object.values(setOfcolors); // ['red', 'blue', ...]
     // Создаем массив цветов длины заголовка, выбирая случайный цвет для каждой буквы
-    return "Угадай цвета".split("").map(() => colors[Math.floor(Math.random() * colors.length)]);
+    return t('title').split("").map(() => colors[Math.floor(Math.random() * colors.length)]);
   };
   // Состояние, хранящее массив цветов для каждой буквы заголовка
   const [titleColors, setTitleColors] = useState(getRandomTitleColors);
@@ -92,12 +102,12 @@ function App() {
       }
     }
     if (matches === n) {
-      playWin(); // Проигрываем звук победы
-      setMessage("Поздравляю! Код взломан! 🎉");
+      //playWin(); // Проигрываем звук победы
+      setMessage(t('win'));
       setIsWinner(true);
     } else {
-      playClick(); // Проигрываем звук при каждом неправильном ответе
-      setMessage(`Угадано позиций: ${matches} из ${n}`);
+      //playClick(); // Проигрываем звук при каждом неправильном ответе
+      setMessage(t('statusMsg', {matchesCount: matches, total: n}));
     }
   }
   const colorsArray = useMemo(() => {
@@ -108,7 +118,7 @@ function App() {
         }
         // Превращаем Set в массив и заменяем числа на цвета
         const result = Array.from(winState).map(num => setOfcolors[num]);
-        console.log("Generated Colors:", result);
+        //console.log("Generated Colors:", result);
         return result;
   }, [gameKey]); // Перегенерировать при изменении gameKey
 
@@ -137,24 +147,30 @@ const handleDrop = (targetIndex) => {
       //  Генерируем НОВЫЙ секретный код
       setGameKey(prev => prev + 1);
       setTitleColors(getRandomTitleColors());
-      setMessage('Расставь цвета и нажми проверку!'); 
+      setMessage(t('msgToDo')); 
       setIsWinner(false);
     };
-
+    
   return (
     <div>
-      <h1>{"Угадай цвета".split("").map((char, index) => (
-        <span key={index} style={{ color: titleColors[index] }}>
-          {char}
-        </span>
-        ))}
-      </h1>
+      <div className='header-wrapper'>
+        <div className="header-spacer"></div> 
+        <h1 className="main-title">{t('title').split("").map((char, index) => (
+          <span key={index} style={{ color: titleColors[index] }}>
+            {char}
+          </span>
+          ))}
+        </h1>
+        <button className="lang-toggle" onClick={toggleLanguage}>
+          {i18n.language === 'en' ? 'RU' : 'EN'}
+        </button>
+      </div>  
       <section className="rules" style={{ textAlign: 'left', padding: '15px', border: '1px solid #fff' }}>
-        <h3>Правила «Цветовой код»:</h3>
-        <p>🎯 <strong>Цель:</strong> Угадай <span style={highlightStyle}>{n}</span> секретных цветов и их порядок.</p>
-        <p>🎨 <strong>Ход:</strong> Расставь свои цвета и нажми «Проверить».</p>
-        <p>🔍 <strong>Подсказка:</strong> Ты узнаешь только <strong>количество</strong> верно угаданных позиций.</p>
-        <p>🏆 <strong>Победа:</strong> Играй, пока не найдешь все <span style={highlightStyle}>{n}</span> совпадений!</p>
+        <h3>{t('rules')}</h3>
+        <p>{t('rule1', {count: n})}</p>
+        <p>{t('rule2')}</p>
+        <p>{t('rule3')}</p>
+        <p>{t('rule4_1')}<span style={highlightStyle}>{n}</span> {t('rule4_2')}</p>
       </section>
       <section className="game-area">
     <div className={`secret-code ${isWinner ? 'winner-jump' : ''}`}>
@@ -192,7 +208,7 @@ const handleDrop = (targetIndex) => {
     <button onClick={checkGuess} 
       className={isShaking ? 'shake-animation' : ''}
       disabled={isWinner}
-      >Проверить
+      >{t('check')}
     </button>
     <button 
         className="restart-btn"
@@ -201,7 +217,7 @@ const handleDrop = (targetIndex) => {
           color: (colorsArray[0] === 'yellow' || colorsArray[0] === 'pink') ? '#000' : '#fff'
          }}
       >
-        Начать сначала 🔄
+        {t('restart')}
       </button>
   </section>
   </div>
