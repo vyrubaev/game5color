@@ -18,8 +18,8 @@ const colorHexMap = {
 
 // настройка MQTT клиента для подключения к HiveMQ Cloud. ВАЖНО: эти данные должны совпадать с тем, что указано в ESP32, иначе связь работать не будет!
 const options = {
-  username: 'boyarin', // Тот же, что в ESP32
-  password: '2310819Vic',
+  username: import.meta.env.VITE_MQTT_USER,
+  password: import.meta.env.VITE_MQTT_PASS,
   clientId: 'react_client_' + Math.random().toString(16).substring(2, 8),
 };
 
