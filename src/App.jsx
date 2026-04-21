@@ -61,6 +61,10 @@ function App() {
   const [draggedIndex, setDraggedIndex] = useState(null);
   const [isShaking, setIsShaking] = useState(false);
   
+  useEffect(() => {
+  setMessage(t('msgToDo'));
+}, [i18n.language]);
+  /*
   const clickSound = useMemo(() => new Audio('/sounds/click.mp3'), []); //TODO - добавить звуки в папку public/sounds 
   const winSound = useMemo(() => new Audio('/sounds/win.mp3'), []);
 
@@ -74,7 +78,7 @@ function App() {
     winSound.volume = 0.6;
     winSound.play();
   };
-  
+  */
   //функция для получения N случайных цветов из набора для заголовка
   const getRandomTitleColors = () => {
     const colors = Object.values(setOfcolors); // ['red', 'blue', ...]
