@@ -4,6 +4,7 @@ import { polyfill } from 'mobile-drag-drop';
 import 'mobile-drag-drop/default.css';
 import mqtt from 'mqtt';
 import { useTranslation } from 'react-i18next';
+import { Analytics } from '@vercel/analytics/react';
 
 // Словарь-переводчик: Название -> HEX-код
 const colorHexMap = {
@@ -157,6 +158,7 @@ const handleDrop = (targetIndex) => {
     
   return (
     <div>
+      <Analytics />
       <div className='header-wrapper'>
         <div className="header-spacer"></div> 
         <h1 className="main-title">{t('title').split("").map((char, index) => (
